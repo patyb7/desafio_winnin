@@ -1,0 +1,39 @@
+graph TD
+    subgraph "Camada Bronze (Ingestão)"
+        A[APIs do YouTube] --> B(Job de Ingestão Diária)
+        B --> C[bronze.youtube_channels]
+        B --> D[bronze.youtube_posts]
+    end
+
+    subgraph "Camada Silver (Enriquecimento)"
+        C --> E(Job de Transformação Diária)
+        D --> E
+        F[APIs da Wikipedia] --> E
+        E --> G[silver.posts_enriched]
+        E --> H[silver.creators_enriched]
+    end
+
+    subgraph "Camada Gold (Análise)"
+        G --> I(Job de Agregação Diária)
+        H --> I
+        I --> J[gold.top_posts_by_creator]
+        I --> K[gold.monthly_post_summary]
+    end
+
+    J --> L[Dashboards/Relatórios]
+    K --> L
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style F fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style E fill:#bbf,stroke:#333,stroke-width:2px
+    style I fill:#bbf,stroke:#333,stroke-width:2px
+    style C fill:#ccf,stroke:#333,stroke-width:2px
+    style D fill:#ccf,stroke:#333,stroke-width:2px
+    style G fill:#ccf,stroke:#333,stroke-width:2px
+    style H fill:#ccf,stroke:#333,stroke-width:2px
+    style J fill:#ccf,stroke:#333,stroke-width:2px
+    style K fill:#ccf,stroke:#333,stroke-width:2px
+    style L fill:#afa,stroke:#333,stroke-width:2px
+
+

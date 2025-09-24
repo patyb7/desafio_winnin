@@ -1,0 +1,46 @@
+Etapa 3: Análise e Agregação (Camada Gold)
+A camada Gold é a de saída, onde os dados são agregados e otimizados para consumo por dashboards, relatórios e aplicações de negócio.
+Processo de Agregação:
+Junção de Dados: O job unirá as tabelas silver.posts_enriched e silver.creators_enriched para criar um conjunto de dados completo.
+Análise e Agregação: As análises que você fez no último notebook (top posts, contagem de posts por mês, etc.) serão executadas aqui.
+Armazenamento: O resultado final será salvo em tabelas Gold.
+gold.top_posts_by_creator: Contém o ranking dos posts por criador.
+gold.monthly_post_summary: Contém a contagem de posts por mês, incluindo os meses com zero posts.
+Documentação do Pipeline
+Para garantir que o pipeline seja compreendido e mantido por outros membros da equipe, a documentação é essencial.
+Documento de Design do Pipeline
+Visão Geral: Descreve a arquitetura geral (Bronze, Silver, Gold).
+Arquitetura do Pipeline
+A arquitetura será dividida em três camadas principais, seguindo o padrão Delta Lake de Bronze, Silver e Gold.
+Bronze (Ingestão): Camada de dados brutos.
+Silver (Enriquecimento): Camada de dados limpos e enriquecidos.
+Gold (Análise): Camada de dados agregados e prontos para relatórios.
+Ferramentas e Tecnologias
+Orquestração: Databricks Workflows.
+Dados: Delta Lake para armazenamento e gerenciamento de dados.
+Processamento: Apache Spark (no Databricks) para processamento em larga escala.
+Coleta de Dados: APIs do YouTube e da Wikipedia.
+Etapa 1: Ingestão de Dados (Camada Bronze)
+O pipeline começa com a coleta dos dados brutos. Como não temos arquivos iniciais, vamos partir das APIs.
+Processo de Ingestão:
+Coleta de Criadores: Um job de ingestão diária se conectará à API do YouTube para buscar canais relevantes. A lista inicial de canais poderia ser gerenciada em uma tabela separada.
+Coleta de Posts: Outro job se conectará à API do YouTube para buscar os posts mais recentes de cada criador.
+Armazenamento: Os dados brutos, em formato JSON, serão salvos em uma tabela Bronze do Delta Lake.
+bronze.youtube_channels: Dados brutos de criadores.
+bronze.youtube_posts: Dados brutos de posts.
+Etapa 2: Enriquecimento de Dados (Camada Silver)
+Esta etapa foca na limpeza, transformação e enriquecimento dos dados. Aqui, vamos usar o mesmo conceito do seu notebook anterior para buscar o user_id da Wikipedia.
+Processo de Enriquecimento:
+Seleção e Limpeza: Um job de transformação vai ler os dados da camada Bronze, selecionar as colunas relevantes (creator_id, views, likes, published_at, etc.) e remover dados duplicados.
+Enriquecimento com a Wikipedia: O job usará uma função para buscar o user_id de cada criador na API da Wikipedia. O resultado será armazenado em uma nova tabela.
+Armazenamento:
+silver.posts_enriched: Posts limpos com informações relevantes.
+silver.creators_enriched: Criadores com o user_id da Wikipedia.
+Fluxo de Dados: Um diagrama de fluxo de dados mostrando como as informações se movem entre as camadas.
+Jobs e Frequência:
+ingest_daily_data: Diariamente, para coletar novos dados.
+transform_daily_data: Diariamente, após a ingestão, para limpar e enriquecer.
+aggregate_daily_data: Diariamente, para gerar as tabelas de análise.
+Schema das Tabelas:
+Detalhar o nome de cada coluna, tipo de dados e descrição em cada tabela (Bronze, Silver e Gold).
+Metodologia de Enriquecimento: Explicar como o user_id da Wikipedia é extraído, mencionando a API utilizada e as possíveis limitações.
