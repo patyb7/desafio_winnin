@@ -60,7 +60,7 @@ O pipeline de dados é construído sobre um conjunto de ferramentas e tecnologia
 ## 4. Fluxo de Dados
 
 
-%% Diagrama do Fluxo de Dados do Pipeline de YouTube
+-- Diagrama do Fluxo de Dados do Pipeline de YouTube
 
 graph TD
     subgraph "Camada Bronze (Ingestão)"
